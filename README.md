@@ -1,4 +1,4 @@
-# debt-log
+# mochi-mochi
 
 ## Project setup
 ```
