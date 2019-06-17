@@ -19,25 +19,18 @@
         <input type="number" name="input4">円
       </section>
       <section>
-        <button class="submit">記録</button>
+        <button class="submit" v-on:click="createLog()">記録</button>
       </section>
     </div>
 
     <div class="app-content app-log">
       <h1>ログ画面</h1>
       <table>
-        <tr>
-          <th>2019-06-31</th>
-          <td>もんち</td>
-          <td>夕飯代</td>
-          <td>1000円</td>
-          <td><button>×</button></td>
-        </tr>
-        <tr>
-          <th>2019-06-31</th>
-          <td>もんち</td>
-          <td>夕飯代</td>
-          <td>1000円</td>
+        <tr v-for="(mochi, key) in mochiRef">
+          <th>{{mochi.date}}</th>
+          <td>{{mochi.person}}</td>
+          <td>{{mochi.what}}</td>
+          <td>{{mochi.yen}}</td>
           <td><button>×</button></td>
         </tr>
       </table>
@@ -50,7 +43,41 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  data () {
+    return {
+      database: null,
+      mochiRef: null,
+      newMochiLog: '',
+      mochiLogs: [],
+      items: [
+        {
+          date: 1,
+          person: 'もんち',
+          what: 'label',
+          yen: 2000
+        }
+      ]
+    }
+  },
+  created: function() {
+    this.database = firebase.database();
+    this.mochiRef = this.database.ref('mochi-log');
+
+    var _this = this;
+    this.mochiRef.on('value', function(snapshot) {
+      _this.mochiLogs = snapshot.val();
+    });
+  },
+  methods: {
+    // createLog: function() {
+    //   if (this.newMochiLog == "") { return; }
+    //   this.mochiRef.push({
+    //     name: this.newMochiLog
+    //   })
+    //   this.newTodoName = "";
+    // }
+  }
 }
 </script>
 
