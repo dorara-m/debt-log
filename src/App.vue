@@ -1,82 +1,114 @@
 <template>
   <div id="app">
-    <div class="app-content app-input">
-      <h1>入力画面</h1>
-      <section>
-        <h2>いつ</h2>
-        <input type="date" name="input1">
-      </section>
-      <section>
-        <h2>誰が</h2>
-        <input type="text" name="input2">
-      </section>
-      <section>
-        <h2>何に</h2>
-        <input type="text" name="input3">
-      </section>
-      <section>
-        <h2>いくら払った</h2>
-        <input type="number" name="input4">円
-      </section>
-      <section>
-        <button class="submit" v-on:click="createLog()">記録</button>
-      </section>
-    </div>
 
     <div class="app-content app-log">
-      <h1>ログ画面</h1>
+      <h1>ログ</h1>
       <table>
-        <tr v-for="(mochi, key) in mochiRef">
-          <th>{{mochi.date}}</th>
-          <td>{{mochi.person}}</td>
-          <td>{{mochi.what}}</td>
-          <td>{{mochi.yen}}</td>
-          <td><button>×</button></td>
-        </tr>
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>いつ</th>
+            <th>誰が</th>
+            <th>何に</th>
+            <th>いくら</th>
+            <th>データの削除</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(mochi, index) in mochis" :key="index">
+            <th>{{index}}</th>
+            <td>{{mochi.date}}</td>
+            <td>{{mochi.person}}</td>
+            <td>{{mochi.label}}</td>
+            <td>{{mochi.price}}</td>
+            <td><button>×</button></td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
-
+    <div class="app-content app-input">
+      <h1>新規もち追加</h1>
+      <p class="error" v-if="isError">未入力の箇所があります</p>
+      <form class="add-form" v-on:submit.prevent="mochiAdd">
+        <p>いつ</p>
+        <input type="date" ref="date">
+        <p>誰が</p>
+        <input type="text" ref="person">
+        <p>何に</p>
+        <input type="text" ref="label">
+        <p>いくら払った</p>
+        <input type="number" ref="price">円
+        <button class="submit">記録</button>
+      </form>
+    </div>
 
   </div>
 </template>
 
 <script>
+const STORAGE_KEY = 'mochi-vuejs-demo'
+const mochiStorage = {
+  fetch: function() {
+    const mochis = JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || '[]'
+    )
+    mochis.forEach(function(mochi, index) {
+      mochi.id = index
+    })
+    mochiStorage.uid = mochis.length
+    return mochis
+  },
+  save: function(mochis) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(mochis))
+  }
+}
+
 export default {
   name: 'app',
-  data () {
+  data: function(){
     return {
-      database: null,
-      mochiRef: null,
-      newMochiLog: '',
-      mochiLogs: [],
-      items: [
-        {
-          date: 1,
-          person: 'もんち',
-          what: 'label',
-          yen: 2000
-        }
-      ]
+      mochis: [],
+      isError: false
     }
   },
-  // created: function() {
-  //   this.database = firebase.database();
-  //   this.mochiRef = this.database.ref('mochi-log');
-
-  //   var _this = this;
-  //   this.mochiRef.on('value', function(snapshot) {
-  //     _this.mochiLogs = snapshot.val();
-  //   });
-  // },
+  watch: {
+    mochis: {
+      handler: function(mochis) {
+        mochiStorage.save(mochis)
+      },
+      deep: true
+    }
+  },
+  created: function() {
+    this.mochis = mochiStorage.fetch();
+  },
   methods: {
-    // createLog: function() {
-    //   if (this.newMochiLog == "") { return; }
-    //   this.mochiRef.push({
-    //     name: this.newMochiLog
-    //   })
-    //   this.newTodoName = "";
-    // }
+    mochiAdd: function() {
+      const date = this.$refs.date;
+      const person = this.$refs.person;
+      const label = this.$refs.label;
+      const price = this.$refs.price;
+
+      if (!date.value.length || !person.value.length || !label.value.length || !price.value.length) {
+        this.isError = true;
+        return;
+      }
+      
+      this.mochis.push ({
+        id: mochiStorage.uid++,
+        date: date.value,
+        person: person.value,
+        label: label.value,
+        price: price.value
+      });
+
+      date.value = '';
+      person.value = '';
+      label.value = '';
+      price.value = '';
+      this.isError = false;
+    }
   }
 }
 </script>
@@ -103,6 +135,9 @@ export default {
 .app-input {
   section {
     margin-top: 30px;
+  }
+  .error {
+    color: red;
   }
   .submit {
     margin-top: 30px;
