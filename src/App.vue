@@ -60,15 +60,15 @@ export default {
       ]
     }
   },
-  created: function() {
-    this.database = firebase.database();
-    this.mochiRef = this.database.ref('mochi-log');
+  // created: function() {
+  //   this.database = firebase.database();
+  //   this.mochiRef = this.database.ref('mochi-log');
 
-    var _this = this;
-    this.mochiRef.on('value', function(snapshot) {
-      _this.mochiLogs = snapshot.val();
-    });
-  },
+  //   var _this = this;
+  //   this.mochiRef.on('value', function(snapshot) {
+  //     _this.mochiLogs = snapshot.val();
+  //   });
+  // },
   methods: {
     // createLog: function() {
     //   if (this.newMochiLog == "") { return; }
