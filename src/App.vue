@@ -51,6 +51,7 @@
         <input type="number" ref="price">円
         <button class="submit">記録</button>
       </form>
+      <div class="debug"><button v-on:click="mochiAdd_demo">デモデータ追加</button></div>
     </div>
 
   </div>
@@ -120,6 +121,15 @@ export default {
       label.value = '';
       price.value = '';
       this.inputError = false;
+    },
+    mochiAdd_demo: function() {
+      this.mochis.push ({
+        id: mochiStorage.uid++,
+        date: '2000-00-00',
+        person: 'サンプル',
+        label: 'サンプルだよ',
+        price: '3000'
+      });
     },
     mochiSave: function(item) {
       this.tmpMochi = item;
