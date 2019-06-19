@@ -11,7 +11,8 @@
             <th>誰が</th>
             <th>何に</th>
             <th>いくら</th>
-            <th>データの削除</th>
+            <th>-</th>
+            <th>-</th>
           </tr>
         </thead>
         <tbody>
@@ -21,15 +22,24 @@
             <td>{{mochi.person}}</td>
             <td>{{mochi.label}}</td>
             <td>{{mochi.price}}</td>
-            <td><button>×</button></td>
+            <td><button>編集</button></td>
+            <td><button v-on:click="mochiSave(mochi)">×</button></td>
           </tr>
         </tbody>
       </table>
+
+      <div class="modalWrap" v-if="isOpenModal">
+        <div class="confirmModal">
+          <p>本当に削除してもいいですか？</p>
+          <button v-on:click="mochiRemove(true)">はい</button>
+          <button v-on:click="mochiRemove(false)">いいえ</button>
+        </div>
+      </div>
     </div>
 
     <div class="app-content app-input">
       <h1>新規もち追加</h1>
-      <p class="error" v-if="isError">未入力の箇所があります</p>
+      <p class="error" v-if="inputError">未入力の箇所があります</p>
       <form class="add-form" v-on:submit.prevent="mochiAdd">
         <p>いつ</p>
         <input type="date" ref="date">
@@ -69,7 +79,9 @@ export default {
   data: function(){
     return {
       mochis: [],
-      isError: false
+      inputError: false,
+      tmpMochi: {},
+      isOpenModal: false
     }
   },
   watch: {
@@ -91,7 +103,7 @@ export default {
       const price = this.$refs.price;
 
       if (!date.value.length || !person.value.length || !label.value.length || !price.value.length) {
-        this.isError = true;
+        this.inputError = true;
         return;
       }
       
@@ -107,7 +119,18 @@ export default {
       person.value = '';
       label.value = '';
       price.value = '';
-      this.isError = false;
+      this.inputError = false;
+    },
+    mochiSave: function(item) {
+      this.tmpMochi = item;
+      this.isOpenModal = true;
+    },
+    mochiRemove: function(isYes) {
+      if (isYes) {
+        const index = this.mochis.indexOf(this.tmpMochi);
+        this.mochis.splice(index, 1);
+      }
+      this.isOpenModal = false;
     }
   }
 }
