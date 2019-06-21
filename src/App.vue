@@ -22,14 +22,28 @@
             <td>{{mochi.person}}</td>
             <td>{{mochi.label}}</td>
             <td>{{mochi.price}}</td>
-            <td><button>編集</button></td>
-            <td><button v-on:click="mochiSave(mochi)">×</button></td>
+            <td><button v-on:click="openModal(mochi, true)">編集</button></td>
+            <td><button v-on:click="openModal(mochi, false)">×</button></td>
           </tr>
         </tbody>
       </table>
 
       <div class="modalWrap" v-if="isOpenModal">
-        <div class="confirmModal">
+        <div v-if="isEdit" class="editModal">
+          <p>編集</p>
+          <!-- <form class="edit-form" v-on:submit.prevent="mochiEdit">
+            <p>いつ</p>
+            <input type="date" ref="date_edit" value=tmpMochi.date>
+            <p>誰が</p>
+            <input type="text" ref="person_edit" value=tmpMochi.person>
+            <p>何に</p>
+            <input type="text" ref="label_edit" value=tmpMochi.label>
+            <p>いくら払った</p>
+            <input type="number" ref="price_edit" value=tmpMochi.price>円
+            <button class="submit">更新</button>
+          </form> -->
+        </div>
+        <div v-else class="confirmModal">
           <p>本当に削除してもいいですか？</p>
           <button v-on:click="mochiRemove(true)">はい</button>
           <button v-on:click="mochiRemove(false)">いいえ</button>
@@ -131,8 +145,11 @@ export default {
         price: '3000'
       });
     },
-    mochiSave: function(item) {
+    openModal: function(item, isEdit) {
       this.tmpMochi = item;
+      if (isEdit) {
+        this.isEdit = true;
+      }
       this.isOpenModal = true;
     },
     mochiRemove: function(isYes) {
