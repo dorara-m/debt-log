@@ -30,7 +30,7 @@
 
       <div class="modalWrap" v-if="isOpenModal">
         <div v-if="isEdit" class="editModal">
-          <p>編集</p>
+          <p>編集画面</p>
           <p class="error" v-if="inputError">未入力の箇所があります</p>
           <form class="edit-form" v-on:submit.prevent="mochiEdit">
             <p>いつ</p>
@@ -43,12 +43,12 @@
             <input type="number" ref="price_edit" :value="tmpMochi.price">円
             <button class="submit">更新</button>
           </form>
-          <button v-on:click="closeModal()">キャンセル</button>
+          <button v-on:click="closeModal">キャンセル</button>
         </div>
         <div v-else class="confirmModal">
           <p>本当に削除してもいいですか？</p>
-          <button v-on:click="mochiRemove(true)">はい</button>
-          <button v-on:click="mochiRemove(false)">いいえ</button>
+          <button v-on:click="mochiRemove">はい</button>
+          <button v-on:click="closeModal">いいえ</button>
         </div>
       </div>
     </div>
@@ -138,6 +138,25 @@ export default {
       price.value = '';
       this.inputError = false;
     },
+    mochiAdd_demo: function() {
+      this.mochis.push ({
+        id: mochiStorage.uid++,
+        date: '2019-06-01',
+        person: 'サンプル',
+        label: 'サンプルだよ',
+        price: '3000'
+      });
+    },
+    openModal: function(item, isEdit) {
+      this.tmpMochi = item;
+      if (isEdit) {
+        this.isEdit = true;
+      }
+      this.isOpenModal = true;
+    },
+    closeModal: function() {
+      this.isOpenModal = false;
+    },
     mochiEdit: function() {
       const tmpId = this.tmpMochi.id;
       const date = this.$refs.date_edit;
@@ -165,30 +184,9 @@ export default {
       this.inputError = false;
       this.isOpenModal = false;
     },
-    mochiAdd_demo: function() {
-      this.mochis.push ({
-        id: mochiStorage.uid++,
-        date: '2019-06-01',
-        person: 'サンプル',
-        label: 'サンプルだよ',
-        price: '3000'
-      });
-    },
-    openModal: function(item, isEdit) {
-      this.tmpMochi = item;
-      if (isEdit) {
-        this.isEdit = true;
-      }
-      this.isOpenModal = true;
-    },
-    closeModal: function() {
-      this.isOpenModal = false;
-    },
-    mochiRemove: function(isYes) {
-      if (isYes) {
-        const index = this.mochis.indexOf(this.tmpMochi);
-        this.mochis.splice(index, 1);
-      }
+    mochiRemove: function() {
+      const index = this.mochis.indexOf(this.tmpMochi);
+      this.mochis.splice(index, 1);
       this.isOpenModal = false;
     }
   }
