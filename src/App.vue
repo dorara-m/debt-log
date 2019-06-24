@@ -31,17 +31,19 @@
       <div class="modalWrap" v-if="isOpenModal">
         <div v-if="isEdit" class="editModal">
           <p>編集</p>
-          <!-- <form class="edit-form" v-on:submit.prevent="mochiEdit">
+          <p class="error" v-if="inputError">未入力の箇所があります</p>
+          <form class="edit-form" v-on:submit.prevent="mochiEdit">
             <p>いつ</p>
-            <input type="date" ref="date_edit" value=tmpMochi.date>
+            <input type="date" ref="date_edit" :value="tmpMochi.date">
             <p>誰が</p>
-            <input type="text" ref="person_edit" value=tmpMochi.person>
+            <input type="text" ref="person_edit" :value="tmpMochi.person">
             <p>何に</p>
-            <input type="text" ref="label_edit" value=tmpMochi.label>
+            <input type="text" ref="label_edit" :value="tmpMochi.label">
             <p>いくら払った</p>
-            <input type="number" ref="price_edit" value=tmpMochi.price>円
+            <input type="number" ref="price_edit" :value="tmpMochi.price">円
             <button class="submit">更新</button>
-          </form> -->
+          </form>
+          <button v-on:click="closeModal()">キャンセル</button>
         </div>
         <div v-else class="confirmModal">
           <p>本当に削除してもいいですか？</p>
@@ -136,10 +138,37 @@ export default {
       price.value = '';
       this.inputError = false;
     },
+    mochiEdit: function() {
+      const tmpId = this.tmpMochi.id;
+      const date = this.$refs.date_edit;
+      const person = this.$refs.person_edit;
+      const label = this.$refs.label_edit;
+      const price = this.$refs.price_edit;
+
+      if (!date.value.length || !person.value.length || !label.value.length || !price.value.length) {
+        this.inputError = true;
+        return;
+      }
+
+      //同じidのもちのindexを特定
+      const mochis = this.mochis;
+      const targetIndex = mochis.findIndex(mochi => mochi.id === tmpId);
+      // 上書き
+      mochis[targetIndex] = {
+        date: date.value,
+        person: person.value,
+        label: label.value,
+        price: price.value
+      };
+      mochiStorage.save(mochis);
+
+      this.inputError = false;
+      this.isOpenModal = false;
+    },
     mochiAdd_demo: function() {
       this.mochis.push ({
         id: mochiStorage.uid++,
-        date: '2000-00-00',
+        date: '2019-06-01',
         person: 'サンプル',
         label: 'サンプルだよ',
         price: '3000'
@@ -151,6 +180,9 @@ export default {
         this.isEdit = true;
       }
       this.isOpenModal = true;
+    },
+    closeModal: function() {
+      this.isOpenModal = false;
     },
     mochiRemove: function(isYes) {
       if (isYes) {
