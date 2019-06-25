@@ -2,13 +2,18 @@
   <div id="app">
 
     <div class="app-content app-log">
-      <h1>ログ</h1>
+      <h1>mochi-mochi</h1>
+      <h2>ユーザー絞り込み</h2>
+      <label v-for="(user, index) in users" :key="index">
+        <input type="radio" v-model="current" :value="user">{{user}}
+      </label>
+      <h2>log</h2>
       <table>
         <thead>
           <tr>
             <th>No.</th>
-            <th>いつ</th>
             <th>誰が</th>
+            <th>いつ</th>
             <th>何に</th>
             <th>いくら</th>
             <th>-</th>
@@ -16,10 +21,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(mochi, index) in mochis" :key="index">
+          <tr v-for="(mochi, index) in computedMochi" :key="index">
             <th>{{index}}</th>
-            <td>{{mochi.date}}</td>
             <td>{{mochi.person}}</td>
+            <td>{{mochi.date}}</td>
             <td>{{mochi.label}}</td>
             <td>{{mochi.price}}</td>
             <td><button v-on:click="openModal(mochi, true)">編集</button></td>
@@ -33,10 +38,10 @@
           <p>編集画面</p>
           <p class="error" v-if="inputError">未入力の箇所があります</p>
           <form class="edit-form" v-on:submit.prevent="mochiEdit">
-            <p>いつ</p>
-            <input type="date" ref="date_edit" :value="tmpMochi.date">
             <p>誰が</p>
             <input type="text" ref="person_edit" :value="tmpMochi.person">
+            <p>いつ</p>
+            <input type="date" ref="date_edit" :value="tmpMochi.date">
             <p>何に</p>
             <input type="text" ref="label_edit" :value="tmpMochi.label">
             <p>いくら払った</p>
@@ -57,10 +62,10 @@
       <h1>新規もち追加</h1>
       <p class="error" v-if="inputError">未入力の箇所があります</p>
       <form class="add-form" v-on:submit.prevent="mochiAdd">
-        <p>いつ</p>
-        <input type="date" ref="date">
         <p>誰が</p>
         <input type="text" ref="person">
+        <p>いつ</p>
+        <input type="date" ref="date">
         <p>何に</p>
         <input type="text" ref="label">
         <p>いくら払った</p>
@@ -96,9 +101,23 @@ export default {
   data: function(){
     return {
       mochis: [],
-      inputError: false,
       tmpMochi: {},
-      isOpenModal: false
+      isEdit: false,
+      inputError: false,
+      isOpenModal: false,
+      current: '全員'
+    }
+  },
+  computed: {
+    users: function() {
+      let persons = this.mochis.map(mochi => mochi.person);
+      persons.unshift('全員');
+      return persons.filter((x, i, self) => self.indexOf(x) === i);
+    },
+    computedMochi: function() {
+      return this.mochis.filter(function(el) {
+        return this.current === '全員' ? true : this.current === el.person
+      }, this);
     }
   },
   watch: {
@@ -180,7 +199,6 @@ export default {
         price: price.value
       };
       mochiStorage.save(mochis);
-
       this.inputError = false;
       this.isOpenModal = false;
     },
