@@ -175,6 +175,7 @@ export default {
     },
     closeModal: function() {
       this.isOpenModal = false;
+      this.isEdit = false;
     },
     mochiEdit: function() {
       const tmpId = this.tmpMochi.id;
@@ -199,7 +200,9 @@ export default {
         price: price.value
       };
       mochiStorage.save(mochis);
+      this.mochis = mochiStorage.fetch();
       this.inputError = false;
+      this.isEdit = false;
       this.isOpenModal = false;
     },
     mochiRemove: function() {
