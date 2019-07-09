@@ -3,15 +3,12 @@
 
     <div class="app-content app-log">
       <h1>mochi-mochi</h1>
-      <h2>ユーザー絞り込み</h2>
-      <label v-for="(user, index) in users" :key="index">
-        <input type="radio" v-model="current" :value="user">{{user}}
-      </label>
-      <h2>log</h2>
+      <select v-model="current">
+        <option v-for="(user, index) in users" :key="index" :value="user">{{user}}</option>
+      </select>
       <table>
         <thead>
           <tr>
-            <th>No.</th>
             <th>誰が</th>
             <th>いつ</th>
             <th>何に</th>
@@ -22,7 +19,6 @@
         </thead>
         <tbody>
           <tr v-for="(mochi, index) in computedMochi" :key="index">
-            <th>{{index}}</th>
             <td>{{mochi.person}}</td>
             <td>{{mochi.date}}</td>
             <td>{{mochi.label}}</td>
