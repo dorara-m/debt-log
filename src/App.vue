@@ -211,6 +211,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import url(./assets/_reset.css);
 .app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
