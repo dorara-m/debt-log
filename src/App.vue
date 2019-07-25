@@ -6,28 +6,21 @@
       <select v-model="current">
         <option v-for="(user, index) in users" :key="index" :value="user">{{user}}</option>
       </select>
-      <table>
-        <thead>
-          <tr>
-            <th>誰が</th>
-            <th>いつ</th>
-            <th>何に</th>
-            <th>いくら</th>
-            <th>-</th>
-            <th>-</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(mochi, index) in computedMochi" :key="index">
-            <td>{{mochi.person}}</td>
-            <td>{{mochi.date}}</td>
-            <td>{{mochi.label}}</td>
-            <td>{{mochi.price}}</td>
-            <td><button v-on:click="openModal(mochi, true)">編集</button></td>
-            <td><button v-on:click="openModal(mochi, false)">×</button></td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-for="(date, index) in dateList" :key="index">
+        <h2>{{date}}</h2>
+        <table>
+          <tbody>
+            <tr v-for="(mochi, index) in computedMochi(date)" :key="index">
+              <td>{{mochi.date}}</td>
+              <td>{{mochi.person}}</td>
+              <td>{{mochi.label}}</td>
+              <td>{{mochi.price}}</td>
+              <td><button v-on:click="openModal(mochi, true)">編集</button></td>
+              <td><button v-on:click="openModal(mochi, false)">×</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="modalWrap" v-if="isOpenModal">
         <div v-if="isEdit" class="editModal">
@@ -111,9 +104,18 @@ export default {
       return persons.filter((x, i, self) => self.indexOf(x) === i);
     },
     computedMochi: function() {
-      return this.mochis.filter(function(el) {
-        return this.current === '全員' ? true : this.current === el.person
-      }, this);
+      const self = this;
+      return function(date) {
+        return this.mochis.filter((el) => {
+          const currentPerson = this.current === '全員' ? true : this.current === el.person;
+          const currentDate = date === el.date;
+          return currentPerson && currentDate;
+        }, self);
+      }
+    },
+    dateList: function() {
+      const date = this.mochis.map(el => el.date);
+      return date.filter((x, i, self) => self.indexOf(x) === i);
     }
   },
   watch: {
