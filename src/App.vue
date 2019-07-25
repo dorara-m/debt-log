@@ -1,28 +1,41 @@
 <template>
-  <div id="app">
-
-    <div class="app-content app-log">
-      <h1>mochi-mochi</h1>
-      <select v-model="current">
-        <option v-for="(user, index) in users" :key="index" :value="user">{{user}}</option>
-      </select>
-      <div v-for="(date, index) in dateList" :key="index">
-        <h2>{{date}}</h2>
-        <table>
-          <tbody>
-            <tr v-for="(mochi, index) in computedMochi(date)" :key="index">
-              <td>{{mochi.date}}</td>
-              <td>{{mochi.person}}</td>
-              <td>{{mochi.label}}</td>
-              <td>{{mochi.price}}</td>
-              <td><button v-on:click="openModal(mochi, true)">編集</button></td>
-              <td><button v-on:click="openModal(mochi, false)">×</button></td>
-            </tr>
-          </tbody>
-        </table>
+  <div class="app" id="app">
+    <header>
+      <div class="container">
+        <h1 class="app-title">Mochi-Mochi</h1>
       </div>
+    </header>
 
-      <div class="modalWrap" v-if="isOpenModal">
+    <div class="app-select">
+      <div class="container">
+        <select v-model="current">
+          <option v-for="(user, index) in users" :key="index" :value="user">{{user}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="app-table">
+      <div class="container">
+        <div v-for="(date, index) in dateList" :key="index">
+          <h2>{{date}}</h2>
+          <table>
+            <tbody>
+              <tr v-for="(mochi, index) in computedMochi(date)" :key="index">
+                <td>{{mochi.date}}</td>
+                <td>{{mochi.person}}</td>
+                <td>{{mochi.label}}</td>
+                <td>{{mochi.price}}</td>
+                <td><button v-on:click="openModal(mochi, true)">編集</button></td>
+                <td><button v-on:click="openModal(mochi, false)">×</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="modalWrap" v-if="isOpenModal">
+      <div class="container">
         <div v-if="isEdit" class="editModal">
           <p>編集画面</p>
           <p class="error" v-if="inputError">未入力の箇所があります</p>
@@ -48,20 +61,22 @@
     </div>
 
     <div class="app-content app-input">
-      <h1>新規もち追加</h1>
-      <p class="error" v-if="inputError">未入力の箇所があります</p>
-      <form class="add-form" v-on:submit.prevent="mochiAdd">
-        <p>誰が</p>
-        <input type="text" ref="person">
-        <p>いつ</p>
-        <input type="date" ref="date">
-        <p>何に</p>
-        <input type="text" ref="label">
-        <p>いくら払った</p>
-        <input type="number" ref="price">円
-        <button class="submit">記録</button>
-      </form>
-      <div class="debug"><button v-on:click="mochiAdd_demo">デモデータ追加</button></div>
+      <div class="container">
+        <h2>新規もち追加</h2>
+        <p class="error" v-if="inputError">未入力の箇所があります</p>
+        <form class="add-form" v-on:submit.prevent="mochiAdd">
+          <p>誰が</p>
+          <input type="text" ref="person">
+          <p>いつ</p>
+          <input type="date" ref="date">
+          <p>何に</p>
+          <input type="text" ref="label">
+          <p>いくら払った</p>
+          <input type="number" ref="price">円
+          <button class="submit">記録</button>
+        </form>
+        <div class="debug"><button v-on:click="mochiAdd_demo">デモデータ追加</button></div>
+      </div>
     </div>
 
   </div>
@@ -213,28 +228,48 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import url(./assets/_reset.css);
 .app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.container {
+  padding: 0 20px;
 }
 
-.app-content {
-  max-width: 800px;
-  margin: 0 auto;
-  margin-bottom: 100px;
-  h1 {
+header {
+  padding: 25px;
+  .app-title {
+    font-size: 40px;
+    font-weight: bold;
     text-align: center;
+  }
+}
+.app-select {
+  margin-top: 60px;
+  display: flex;
+  justify-content: flex-end;
+  select {
+    font-size: 14px;
+  }
+}
+.app-table {
+  margin-top: 50px;
+  table {
+    width: 100%;
+    td, th {
+      border: 1px solid #444;
+      text-align: center;
+    }
   }
 }
 
 .app-input {
-  section {
-    margin-top: 30px;
-  }
+  margin-top: 50px;
   .error {
     color: red;
   }
@@ -242,17 +277,6 @@ export default {
     margin-top: 30px;
     width: 200px;
     font-size: 20px;
-  }
-}
-
-.app-log {
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  td, th {
-    border: 1px solid #444;
-    text-align: center;
   }
 }
 </style>
