@@ -20,7 +20,7 @@
           <h2>{{date}}</h2>
           <table>
             <tbody>
-              <tr v-for="(mochi, index) in computedMochi(date)" :key="index">
+              <tr v-for="(mochi, index) in currentDateMochi(date)" :key="index">
                 <td>{{mochi.date}}</td>
                 <td>{{mochi.person}}</td>
                 <td>{{mochi.label}}</td>
@@ -119,19 +119,21 @@ export default {
       return persons.filter((x, i, self) => self.indexOf(x) === i);
     },
     computedMochi: function() {
-      const self = this;
-      return function(date) {
-        return this.mochis.filter((el) => {
-          const currentPerson = this.current === '全員' ? true : this.current === el.person;
-          const currentDate = date === el.date;
-          return currentPerson && currentDate;
-        }, self);
-      }
+      return this.mochis.filter((el) => {
+        return this.current === '全員' ? true : this.current === el.person;
+      }, this);
     },
     dateList: function() {
-      const date = this.mochis.map(el => el.date);
-      return date.filter((x, i, self) => self.indexOf(x) === i);
-    }
+      const date = this.computedMochi.map(el => el.date);
+      const uniqueDate = date.filter((x, i, self) => self.indexOf(x) === i);
+      return uniqueDate.sort((a,b) => new Date(b) - new Date(a));
+    },
+    currentDateMochi: function(date) {
+      const self = this;
+      return function(date) {
+        return this.computedMochi.filter((el) => el.date === date);
+      }
+    } 
   },
   watch: {
     mochis: {
