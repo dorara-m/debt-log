@@ -16,7 +16,7 @@
 
     <div class="app-table">
       <div class="container">
-        <div v-for="(date, index) in dateList" :key="index">
+        <div class="app-table-date" v-for="(date, index) in dateList" :key="index">
           <h2>{{date}}</h2>
           <table>
             <tbody>
@@ -259,11 +259,19 @@ header {
 }
 .app-table {
   margin-top: 50px;
-  table {
-    width: 100%;
-    td, th {
-      border: 1px solid #444;
-      text-align: center;
+  &-date {
+    margin-top: 20px;
+    > h2 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    table {
+      width: 100%;
+      td, th {
+        border: 1px solid #444;
+        text-align: center;
+      }
     }
   }
 }
