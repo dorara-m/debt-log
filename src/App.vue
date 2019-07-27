@@ -21,7 +21,6 @@
           <table>
             <tbody>
               <tr v-for="(mochi, index) in currentDateMochi(date)" :key="index">
-                <td>{{mochi.date}}</td>
                 <td>{{mochi.person}}</td>
                 <td>{{mochi.label}}</td>
                 <td>{{mochi.price}}</td>
@@ -128,8 +127,7 @@ export default {
       const uniqueDate = date.filter((x, i, self) => self.indexOf(x) === i);
       return uniqueDate.sort((a,b) => new Date(b) - new Date(a));
     },
-    currentDateMochi: function(date) {
-      const self = this;
+    currentDateMochi: function() {
       return function(date) {
         return this.computedMochi.filter((el) => el.date === date);
       }
