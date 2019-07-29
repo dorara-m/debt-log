@@ -25,8 +25,7 @@
                 <td>{{mochi.person}}</td>
                 <td>{{mochi.label}}</td>
                 <td>{{mochi.price}}</td>
-                <td><button v-on:click="openModal(mochi, true)">編集</button></td>
-                <td><button v-on:click="openModal(mochi, false)">×</button></td>
+                <td><button v-on:click="openModal(mochi)">編集</button></td>
               </tr>
             </tbody>
           </table>
@@ -36,8 +35,8 @@
 
     <div class="modalWrap" v-if="isOpenModal">
       <div class="container">
-        <div v-if="isEdit" class="editModal">
-          <p>編集画面</p>
+        <div class="editModal">
+          <p>Edit</p>
           <p class="error" v-if="inputError">未入力の箇所があります</p>
           <form class="edit-form" v-on:submit.prevent="mochiEdit">
             <p>誰が</p>
@@ -51,11 +50,12 @@
             <button class="submit">更新</button>
           </form>
           <button v-on:click="closeModal">キャンセル</button>
-        </div>
-        <div v-else class="confirmModal">
-          <p>本当に削除してもいいですか？</p>
-          <button v-on:click="mochiRemove">はい</button>
-          <button v-on:click="closeModal">いいえ</button>
+          <button v-on:click="confirmOpen">削除</button>
+          <div v-if="isConfirm" class="confirmArea">
+            <p>本当に削除してもいいですか？</p>
+            <button v-on:click="mochiRemove">はい</button>
+            <button v-on:click="confirmClose">いいえ</button>
+          </div>
         </div>
       </div>
     </div>
@@ -106,7 +106,7 @@ export default {
     return {
       mochis: [],
       tmpMochi: {},
-      isEdit: false,
+      isConfirm: false,
       inputError: false,
       isOpenModal: false,
       current: '全員'
@@ -181,16 +181,12 @@ export default {
         price: '3000'
       });
     },
-    openModal: function(item, isEdit) {
+    openModal: function(item) {
       this.tmpMochi = item;
-      if (isEdit) {
-        this.isEdit = true;
-      }
       this.isOpenModal = true;
     },
     closeModal: function() {
       this.isOpenModal = false;
-      this.isEdit = false;
     },
     mochiEdit: function() {
       const tmpId = this.tmpMochi.id;
@@ -220,10 +216,17 @@ export default {
       this.isEdit = false;
       this.isOpenModal = false;
     },
+    confirmOpen: function() {
+      this.isConfirm = true;
+    },
+    confirmClose: function() {
+      this.isConfirm = false;
+    },
     mochiRemove: function() {
       const index = this.mochis.indexOf(this.tmpMochi);
       this.mochis.splice(index, 1);
       this.isOpenModal = false;
+      this.isConfirm = false;
     }
   }
 }
