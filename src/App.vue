@@ -1,84 +1,88 @@
 <template>
+  <!-- <div class="app" id="app" :style="{ top: -scrollTop+ 'px'}" :class="{fixed : isOpenModal}"> -->
   <div class="app" id="app">
-    <header>
-      <div class="container">
-        <h1 class="app-title">Mochi-Mochi</h1>
-      </div>
-    </header>
+    <main :class="{blur: isOpenModal}">
+      <header>
+        <div class="container">
+          <h1 class="app-title">Mochi-Mochi</h1>
+        </div>
+      </header>
 
-    <div class="app-select">
-      <div class="container">
-        <select v-model="current">
-          <option v-for="(user, index) in users" :key="index" :value="user">{{user}}</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="app-table">
-      <div class="container">
-        <div class="app-table-date" v-for="(date, index) in dateList" :key="index">
-          <h2>{{date}}</h2>
-          <table>
-            <tbody>
-              <tr v-for="(mochi, index) in currentDateMochi(date)" :key="index">
-                <td>{{mochi.date}}</td>
-                <td>{{mochi.person}}</td>
-                <td>{{mochi.label}}</td>
-                <td>{{mochi.price}}</td>
-                <td><button v-on:click="openModal(mochi)">編集</button></td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="app-select">
+        <div class="container">
+          <select v-model="current">
+            <option v-for="(user, index) in users" :key="index" :value="user">{{user}}</option>
+          </select>
         </div>
       </div>
-    </div>
+
+      <div class="app-table">
+        <div class="container">
+          <div class="app-table-date" v-for="(date, index) in dateList" :key="index">
+            <h2>{{date}}</h2>
+            <table>
+              <tbody>
+                <tr v-for="(mochi, index) in currentDateMochi(date)" :key="index">
+                  <td>{{mochi.date}}</td>
+                  <td>{{mochi.person}}</td>
+                  <td>{{mochi.label}}</td>
+                  <td>{{mochi.price}}</td>
+                  <td><button v-on:click="openModal(mochi)">編集</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="app-input">
+        <div class="container">
+          <h2>新規もち追加</h2>
+          <p class="error" v-if="inputError">未入力の箇所があります</p>
+          <form class="add-form" v-on:submit.prevent="mochiAdd">
+            <p>誰が</p>
+            <input type="text" ref="person">
+            <p>いつ</p>
+            <input type="date" ref="date">
+            <p>何に</p>
+            <input type="text" ref="label">
+            <p>いくら払った</p>
+            <input type="number" ref="price">円
+            <button class="submit">記録</button>
+          </form>
+          <div class="debug"><button v-on:click="mochiAdd_demo">デモデータ追加</button></div>
+        </div>
+      </div>
+    </main>
 
     <div class="modalWrap" v-if="isOpenModal">
-      <div class="container">
-        <div class="editModal">
-          <p>Edit</p>
-          <p class="error" v-if="inputError">未入力の箇所があります</p>
-          <form class="edit-form" v-on:submit.prevent="mochiEdit">
-            <p>誰が</p>
-            <input type="text" ref="person_edit" :value="tmpMochi.person">
-            <p>いつ</p>
-            <input type="date" ref="date_edit" :value="tmpMochi.date">
-            <p>何に</p>
-            <input type="text" ref="label_edit" :value="tmpMochi.label">
-            <p>いくら払った</p>
-            <input type="number" ref="price_edit" :value="tmpMochi.price">円
-            <button class="submit">更新</button>
-          </form>
-          <button v-on:click="closeModal">キャンセル</button>
-          <button v-on:click="confirmOpen">削除</button>
-          <div v-if="isConfirm" class="confirmArea">
-            <p>本当に削除してもいいですか？</p>
-            <button v-on:click="mochiRemove">はい</button>
-            <button v-on:click="confirmClose">いいえ</button>
+      <div class="modal">
+        <div class="container">
+          <div class="editModal">
+            <p>Edit</p>
+            <p class="error" v-if="inputError">未入力の箇所があります</p>
+            <form class="edit-form" v-on:submit.prevent="mochiEdit">
+              <p>誰が</p>
+              <input type="text" ref="person_edit" :value="tmpMochi.person">
+              <p>いつ</p>
+              <input type="date" ref="date_edit" :value="tmpMochi.date">
+              <p>何に</p>
+              <input type="text" ref="label_edit" :value="tmpMochi.label">
+              <p>いくら払った</p>
+              <input type="number" ref="price_edit" :value="tmpMochi.price">円
+              <button class="submit">更新</button>
+            </form>
+            <button v-on:click="closeModal">キャンセル</button>
+            <button v-on:click="confirmOpen">削除</button>
+            <div v-if="isConfirm" class="confirmArea">
+              <p>本当に削除してもいいですか？</p>
+              <button v-on:click="mochiRemove">はい</button>
+              <button v-on:click="confirmClose">いいえ</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="app-content app-input">
-      <div class="container">
-        <h2>新規もち追加</h2>
-        <p class="error" v-if="inputError">未入力の箇所があります</p>
-        <form class="add-form" v-on:submit.prevent="mochiAdd">
-          <p>誰が</p>
-          <input type="text" ref="person">
-          <p>いつ</p>
-          <input type="date" ref="date">
-          <p>何に</p>
-          <input type="text" ref="label">
-          <p>いくら払った</p>
-          <input type="number" ref="price">円
-          <button class="submit">記録</button>
-        </form>
-        <div class="debug"><button v-on:click="mochiAdd_demo">デモデータ追加</button></div>
-      </div>
-    </div>
-
   </div>
 </template>
 
@@ -109,6 +113,7 @@ export default {
       isConfirm: false,
       inputError: false,
       isOpenModal: false,
+      // scrollTop: 0,
       current: '全員'
     }
   },
@@ -184,9 +189,12 @@ export default {
     openModal: function(item) {
       this.tmpMochi = item;
       this.isOpenModal = true;
+      // this.scrollTop = window.pageYOffset;
     },
     closeModal: function() {
       this.isOpenModal = false;
+      // this.scrollTop = 0;
+      // window.scrollTo(0, this.scrollTop);
     },
     mochiEdit: function() {
       const tmpId = this.tmpMochi.id;
@@ -239,13 +247,28 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  max-width: 500px;
   margin: 0 auto;
+  position: relative;
+  padding: 50px 0;
+  &.fixed {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+  }
 }
 .container {
   padding: 0 20px;
+  @media print, screen and (min-width: 767px) {
+    max-width: 500px;
+    margin: 0 auto;
+  }
 }
-
+main {
+  &.blur {
+    opacity: .3;
+  }
+}
 header {
   padding: 25px;
   .app-title {
@@ -278,6 +301,23 @@ header {
         text-align: center;
       }
     }
+  }
+}
+
+.modalWrap {
+  position: fixed;
+  background-color: rgba($color: #000, $alpha: .4);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  > .modal {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    padding: 40px 0;
   }
 }
 
