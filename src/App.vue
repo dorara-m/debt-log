@@ -9,7 +9,7 @@
       </header>
 
       <div class="app-select">
-        <div class="container">
+        <div class="container flex">
           <select v-model="current">
             <option v-for="(user, index) in users" :key="index" :value="user">{{user}}</option>
           </select>
@@ -19,7 +19,7 @@
       <div class="app-table">
         <div class="container">
           <div class="app-table-date" v-for="(date, index) in dateList" :key="index">
-            <h2>{{date}}</h2>
+            <h3>{{date}}</h3>
             <table>
               <tbody>
                 <tr v-for="(mochi, index) in currentDateMochi(date)" :key="index">
@@ -40,14 +40,18 @@
           <h2>新規もち追加</h2>
           <p class="error" v-if="inputError">未入力の箇所があります</p>
           <form class="add-form" v-on:submit.prevent="mochiAdd">
-            <p>誰が</p>
-            <input type="text" ref="person">
-            <p>いつ</p>
-            <input type="date" ref="date">
-            <p>何に</p>
-            <input type="text" ref="label">
-            <p>いくら払った</p>
-            <input type="number" ref="price">円
+            <div class="flex">
+              ¥<input type="number" ref="price" placeholder="いくら">
+            </div>
+            <div>
+              <input type="text" ref="person" placeholder="誰が">
+            </div>
+            <div>
+              <input type="date" ref="date" placeholder="いつ">
+            </div>
+            <div>
+              <input type="text" ref="label" placeholder="何に">
+            </div>
             <button class="submit">記録</button>
           </form>
           <div class="debug"><button v-on:click="mochiAdd_demo">デモデータ追加</button></div>
@@ -59,20 +63,24 @@
       <div class="modal">
         <div class="container">
           <div class="editModal">
-            <p>Edit</p>
+            <h2>Edit</h2>
             <p class="error" v-if="inputError">未入力の箇所があります</p>
+            <button class="close" v-on:click="closeModal">☓</button>
             <form class="edit-form" v-on:submit.prevent="mochiEdit">
-              <p>誰が</p>
-              <input type="text" ref="person_edit" :value="tmpMochi.person">
-              <p>いつ</p>
-              <input type="date" ref="date_edit" :value="tmpMochi.date">
-              <p>何に</p>
-              <input type="text" ref="label_edit" :value="tmpMochi.label">
-              <p>いくら払った</p>
-              <input type="number" ref="price_edit" :value="tmpMochi.price">円
+              <div class="flex">
+                ¥<input type="number" ref="price_edit" :value="tmpMochi.price" placeholder="いくら">
+              </div>
+              <div>
+                <input type="text" ref="person_edit" :value="tmpMochi.person" placeholder="誰が">
+              </div>
+              <div>
+                <input type="date" ref="date_edit" :value="tmpMochi.date" placeholder="いつ">
+              </div>
+              <div>
+                <input type="text" ref="label_edit" :value="tmpMochi.label" placeholder="何に">
+              </div>
               <button class="submit">更新</button>
             </form>
-            <button v-on:click="closeModal">キャンセル</button>
             <button v-on:click="confirmOpen">削除</button>
             <div v-if="isConfirm" class="confirmArea">
               <p>本当に削除してもいいですか？</p>
@@ -278,17 +286,20 @@ header {
 }
 .app-select {
   margin-top: 60px;
-  display: flex;
-  justify-content: flex-end;
-  select {
-    font-size: 14px;
+  > .flex {
+    display: flex;
+    justify-content: flex-end;
+    select {
+      font-size: 14px;
+      width: 120px;
+    }
   }
 }
 .app-table {
   margin-top: 50px;
   &-date {
     margin-top: 20px;
-    > h2 {
+    > h3 {
       font-size: 20px;
       font-weight: bold;
       margin-bottom: 5px;
@@ -316,7 +327,33 @@ header {
     left: 0;
     width: 100%;
     background-color: #fff;
+  }
+  .editModal {
     padding: 40px 0;
+    position: relative;
+    > h2 {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input {
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+    .flex {
+      display: flex;
+      justify-content: flex-end;
+      font-size: 20px;
+      > input {
+        font-size: inherit;
+      }
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      left: 0;
+    }
   }
 }
 
