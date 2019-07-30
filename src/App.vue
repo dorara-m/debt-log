@@ -1,6 +1,6 @@
 <template>
-  <!-- <div class="app" id="app" :style="{ top: -scrollTop+ 'px'}" :class="{fixed : isOpenModal}"> -->
-  <div class="app" id="app">
+  <div class="app" id="app" :style="{ top: -scrollTop+ 'px'}" :class="{fixed : isOpenModal}">
+  <!-- <div class="app" id="app"> -->
     <main :class="{blur: isOpenModal}">
       <header>
         <div class="container">
@@ -113,7 +113,7 @@ export default {
       isConfirm: false,
       inputError: false,
       isOpenModal: false,
-      // scrollTop: 0,
+      scrollTop: 0,
       current: '全員'
     }
   },
@@ -189,12 +189,12 @@ export default {
     openModal: function(item) {
       this.tmpMochi = item;
       this.isOpenModal = true;
-      // this.scrollTop = window.pageYOffset;
+      this.scrollTop = window.pageYOffset;
     },
     closeModal: function() {
+      window.scrollTo(0, this.scrollTop);
+      this.scrollTop = 0;
       this.isOpenModal = false;
-      // this.scrollTop = 0;
-      // window.scrollTo(0, this.scrollTop);
     },
     mochiEdit: function() {
       const tmpId = this.tmpMochi.id;
@@ -221,8 +221,7 @@ export default {
       mochiStorage.save(mochis);
       this.mochis = mochiStorage.fetch();
       this.inputError = false;
-      this.isEdit = false;
-      this.isOpenModal = false;
+      this.closeModal();
     },
     confirmOpen: function() {
       this.isConfirm = true;
@@ -233,8 +232,8 @@ export default {
     mochiRemove: function() {
       const index = this.mochis.indexOf(this.tmpMochi);
       this.mochis.splice(index, 1);
-      this.isOpenModal = false;
       this.isConfirm = false;
+      this.closeModal();
     }
   }
 }
