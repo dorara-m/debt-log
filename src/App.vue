@@ -1,5 +1,5 @@
 <template>
-  <div class="app" id="app" :style="{ top: -scrollTop+ 'px'}" :class="{fixed : isOpenModal}">
+  <div class="app" id="app">
   <!-- <div class="app" id="app"> -->
     <main :class="{blur: isOpenModal}">
       <header>
@@ -120,7 +120,7 @@ export default {
       isConfirm: false,
       inputError: false,
       isOpenModal: false,
-      scrollTop: 0,
+      scrollPosition: 0,
       current: '全員'
     }
   },
@@ -195,12 +195,23 @@ export default {
     openModal: function(item) {
       this.tmpMochi = item;
       this.isOpenModal = true;
-      this.scrollTop = window.pageYOffset;
+      this.initNoScroll();
     },
     closeModal: function() {
-      window.scrollTo(0, this.scrollTop);
-      this.scrollTop = 0;
       this.isOpenModal = false;
+      this.destoryNoScroll();
+    },
+    initNoScroll() {
+      this.scrollPosition = window.pageYOffset;
+      const $body = document.body;
+      $body.classList.add('isNoScroll');
+      $body.style.setProperty('top', `-${this.scrollPosition}px`);
+    },
+    destoryNoScroll() {
+      const $body = document.body;
+      $body.classList.remove('isNoScroll');
+      $body.style.removeProperty('top');
+      window.scrollTo(0, this.scrollPosition);
     },
     mochiEdit: function() {
       const tmpId = this.tmpMochi.id;
@@ -247,6 +258,14 @@ export default {
 
 <style lang="scss" scoped>
 @import url(./assets/_reset.css);
+body {
+  &.isNoScroll {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+  }
+}
 .app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -255,12 +274,6 @@ export default {
   margin: 0 auto;
   position: relative;
   padding: 50px 0;
-  &.fixed {
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
-    position: fixed;
-  }
 }
 .container {
   padding: 0 20px;
