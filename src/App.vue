@@ -80,11 +80,11 @@
               </div>
               <button class="submit">更新</button>
             </form>
-            <button v-on:click="confirmOpen">削除</button>
+            <button v-on:click="isConfirm = true">削除</button>
             <div v-if="isConfirm" class="confirmArea">
               <p>本当に削除してもいいですか？</p>
               <button v-on:click="mochiRemove">はい</button>
-              <button v-on:click="confirmClose">いいえ</button>
+              <button v-on:click="isConfirm = false">いいえ</button>
             </div>
           </div>
         </div>
@@ -239,12 +239,6 @@ export default {
       this.mochis = mochiStorage.fetch();
       this.inputError = false;
       this.closeModal();
-    },
-    confirmOpen: function() {
-      this.isConfirm = true;
-    },
-    confirmClose: function() {
-      this.isConfirm = false;
     },
     mochiRemove: function() {
       const index = this.mochis.indexOf(this.tmpMochi);
