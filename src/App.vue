@@ -65,22 +65,24 @@
             <h2>Edit</h2>
             <p class="error" v-if="inputError">未入力の箇所があります</p>
             <button class="close" v-on:click="closeModal">☓</button>
-            <form class="edit-form" v-on:submit.prevent="mochiEdit">
-              <div class="flex">
+            <form class="edit-form">
+              <div class="inputWrap price">
                 ¥<input type="number" ref="price_edit" :value="tmpMochi.price" placeholder="いくら">
               </div>
-              <div>
-                <input type="text" ref="person_edit" :value="tmpMochi.person" placeholder="誰が">
-              </div>
-              <div>
+              <div class="inputWrap">
                 <input type="date" ref="date_edit" :value="tmpMochi.date" placeholder="いつ">
               </div>
-              <div>
+              <div class="inputWrap">
                 <input type="text" ref="label_edit" :value="tmpMochi.label" placeholder="何に">
               </div>
-              <button class="submit">更新</button>
+              <div class="inputWrap">
+                <input type="text" ref="person_edit" :value="tmpMochi.person" placeholder="誰が">
+              </div>
             </form>
-            <button v-on:click="isConfirm = true">削除</button>
+            <div class="btnArea">
+              <button v-on:click="isConfirm = true">delete</button>
+              <button class="submit" v-on:click="mochiEdit">update</button>
+            </div>
             <div v-if="isConfirm" class="confirmArea">
               <p>本当に削除してもいいですか？</p>
               <button v-on:click="mochiRemove">はい</button>
@@ -276,6 +278,17 @@ body {
     margin: 0 auto;
   }
 }
+input, button, textarea, select {
+	margin: 0;
+	padding: 0;
+	background: none;
+	border: none;
+	border-radius: 0;
+	outline: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
 main {
   &.blur {
     opacity: .3;
@@ -336,28 +349,51 @@ header {
   .editModal {
     padding: 40px 0;
     position: relative;
+    font-weight: bold;
     > h2 {
-      font-size: 20px;
-      font-weight: bold;
+      font-size: 24px;
       text-align: center;
       margin-bottom: 20px;
-    }
-    input {
-      display: inline-block;
-      margin-bottom: 15px;
-    }
-    .flex {
-      display: flex;
-      justify-content: flex-end;
-      font-size: 20px;
-      > input {
-        font-size: inherit;
-      }
     }
     .close {
       position: absolute;
       top: 20px;
       left: 0;
+    }
+    .inputWrap {
+      border-bottom: 1px solid #bbb;
+      padding-bottom: 3px;
+      margin-bottom: 15px;
+      font-size: 13px;
+      > input {
+        font-weight: inherit;
+        font-size: inherit;
+        display: inline-block;
+      }
+      &.price {
+        display: flex;
+        justify-content: space-between;
+        font-size: 18px;
+        padding-bottom: 5px;
+        margin-bottom: 25px;
+        > input {
+          text-align: right;
+        }
+      }
+    }
+    .btnArea {
+      margin-top: 50px;
+      width: 210px;
+      margin-right: auto;
+      margin-left: auto;
+      display: flex;
+      justify-content: space-around;
+      > button {
+        border: 1px solid #999;
+        font-size: 16px;
+        padding: 6px 10px;
+        font-weight: inherit;
+      }
     }
   }
 }
