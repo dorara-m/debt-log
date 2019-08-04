@@ -59,8 +59,8 @@
 
     <div class="modalWrap" v-if="isOpenModal">
       <div class="modal">
-        <div class="container">
-          <div class="editModal">
+        <div class="editModal" :class="{confirmOpen : isConfirm}">
+          <div class="container">
             <h2>Edit</h2>
             <p class="error" v-if="inputError">未入力の箇所があります</p>
             <button class="close" v-on:click="closeModal">☓</button>
@@ -82,10 +82,12 @@
               <button v-on:click="isConfirm = true">delete</button>
               <button class="submit" v-on:click="mochiEdit">update</button>
             </div>
-            <div v-if="isConfirm" class="confirmArea">
-              <p>本当に削除してもいいですか？</p>
-              <button v-on:click="mochiRemove">はい</button>
-              <button v-on:click="isConfirm = false">いいえ</button>
+          </div>
+          <div v-if="isConfirm" class="confirmArea">
+            <p>本当に削除してもいいですか？</p>
+            <div class="btns">
+              <button v-on:click="mochiRemove">Yes</button>
+              <button v-on:click="isConfirm = false">No</button>
             </div>
           </div>
         </div>
@@ -349,7 +351,16 @@ header {
     padding: 40px 0;
     position: relative;
     font-weight: bold;
-    > h2 {
+    &.confirmOpen::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba($color: #000, $alpha: .7);
+    }
+    h2 {
       font-size: 24px;
       text-align: center;
       margin-bottom: 20px;
@@ -357,7 +368,7 @@ header {
     .close {
       position: absolute;
       top: 20px;
-      left: 0;
+      left: 20px;
     }
     .inputWrap {
       border-bottom: 1px solid #bbb;
@@ -392,6 +403,31 @@ header {
         font-size: 16px;
         padding: 6px 10px;
         font-weight: inherit;
+      }
+    }
+
+    .confirmArea {
+      position: absolute;
+      bottom: 0;
+      z-index: 2;
+      padding: 20px;
+      background-color: #fff;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      .btns {
+        margin-top: 20px;
+        display: flex;
+        width: 110px;
+        margin-right: auto;
+        margin-left: auto;
+        justify-content: space-between;
+        > button {
+          border: 1px solid #999;
+          font-size: 16px;
+          padding: 6px 10px;
+          font-weight: inherit;
+        }
       }
     }
   }
