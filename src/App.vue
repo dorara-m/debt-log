@@ -1,6 +1,5 @@
 <template>
   <div class="app" id="app">
-  <!-- <div class="app" id="app"> -->
     <main :class="{blur: isOpenModal}">
       <header>
         <div class="container">
