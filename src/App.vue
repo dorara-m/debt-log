@@ -15,20 +15,21 @@
         </div>
       </div>
 
-      <div class="app-table">
+      <div class="app-data">
         <div class="container">
-          <div class="app-table-date" v-for="(date, index) in dateList" :key="index">
+          <div class="app-data-date" v-for="(date, index) in dateList" :key="index">
             <h3>{{date}}</h3>
-            <table>
-              <tbody>
-                <tr v-for="(mochi, index) in currentDateMochi(date)" :key="index">
-                  <td>{{mochi.person}}</td>
-                  <td>{{mochi.label}}</td>
-                  <td>{{mochi.price}}</td>
-                  <td><button v-on:click="openModal(mochi)">編集</button></td>
-                </tr>
-              </tbody>
-            </table>
+            <ul class="app-data-list">
+              <li v-for="(mochi, index) in currentDateMochi(date)" :key="index">
+                <button v-on:click="openModal(mochi)">
+                  <div class="right">
+                    <div class="person">{{mochi.person}}</div>
+                    <div class="label">{{mochi.label}}</div>
+                  </div>
+                  <div class="price">¥{{mochi.price}}</div>
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -267,6 +268,7 @@ body {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.02em;
   color: #2c3e50;
   margin: 0 auto;
   position: relative;
@@ -285,10 +287,11 @@ input, button, textarea, select {
 	background: none;
 	border: none;
 	border-radius: 0;
-	outline: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
+  text-align: left;
+  letter-spacing: inherit;
 }
 main {
   &.blur {
@@ -314,7 +317,7 @@ header {
     }
   }
 }
-.app-table {
+.app-data {
   margin-top: 50px;
   &-date {
     margin-top: 20px;
@@ -323,11 +326,32 @@ header {
       font-weight: bold;
       margin-bottom: 5px;
     }
-    table {
-      width: 100%;
-      td, th {
-        border: 1px solid #444;
-        text-align: center;
+  }
+  &-list {
+    li {
+      margin-bottom: 8px;
+      > button {
+        width: 100%;
+        border: 1px solid #bbb;
+        padding: 5px 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        > .right {
+          > .person {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 3px;
+          }
+          > .label {
+            font-size: 14px;
+            font-weight: bold;
+          }
+        }
+        > .price {
+          font-size: 18px;
+          font-weight: bold;
+        }
       }
     }
   }
