@@ -63,7 +63,7 @@
           <div class="container">
             <h2>Edit</h2>
             <p class="error" v-if="inputError">未入力の箇所があります</p>
-            <button class="close" v-on:click="closeModal">☓</button>
+            <button class="close" v-on:click="closeModal"></button>
             <form class="edit-form">
               <div class="inputWrap price">
                 ¥<input type="number" ref="price_edit" :value="tmpMochi.price" placeholder="いくら">
@@ -347,6 +347,28 @@ header {
     width: 100%;
     background-color: #fff;
   }
+  .close {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 20px;
+    height: 20px;
+    &:before, &:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      left: 0;
+      top: 50%;
+      height: 2px;
+      background-color: #444;
+    }
+    &:before {
+      transform: rotate(45deg);
+    }
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }
   .editModal {
     padding: 40px 0;
     position: relative;
@@ -364,11 +386,6 @@ header {
       font-size: 24px;
       text-align: center;
       margin-bottom: 20px;
-    }
-    .close {
-      position: absolute;
-      top: 20px;
-      left: 20px;
     }
     .inputWrap {
       border-bottom: 1px solid #bbb;
@@ -431,6 +448,14 @@ header {
       }
     }
   }
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .app-input {
