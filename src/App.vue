@@ -307,7 +307,7 @@ header {
   }
 }
 .app-select {
-  margin-top: 60px;
+  margin-top: 30px;
   > .flex {
     display: flex;
     justify-content: flex-end;
@@ -318,9 +318,9 @@ header {
   }
 }
 .app-data {
-  margin-top: 50px;
+  margin-top: 20px;
   &-date {
-    margin-top: 20px;
+    margin-top: 25px;
     > h3 {
       font-size: 20px;
       font-weight: bold;
