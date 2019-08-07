@@ -98,27 +98,14 @@
 </template>
 
 <script>
-const STORAGE_KEY = 'mochi-vuejs-demo'
-const mochiStorage = {
-  fetch: function() {
-    const mochis = JSON.parse(
-      localStorage.getItem(STORAGE_KEY) || '[]'
-    )
-    mochis.forEach(function(mochi, index) {
-      mochi.id = index
-    })
-    mochiStorage.uid = mochis.length
-    return mochis
-  },
-  save: function(mochis) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(mochis))
-  }
-}
+import firebase from 'firebase/app'
+import "firebase/database";
 
 export default {
   name: 'app',
   data: function(){
     return {
+      mochisRef: null,
       mochis: [],
       tmpMochi: {},
       isConfirm: false,
@@ -127,6 +114,16 @@ export default {
       scrollPosition: 0,
       current: '全員'
     }
+  },
+  created: function() {
+    this.mochisRef = firebase.database().ref('/mochi-log');
+
+    var _this = this;
+    this.mochisRef.on('value', function(snapshot) {
+      const mochisObject = snapshot.val();
+      const items = Object.keys(mochisObject).map(key => Object.assign({id: key}, mochisObject[key]));
+      _this.mochis = items;
+    });
   },
   computed: {
     users: function() {
@@ -150,17 +147,6 @@ export default {
       }
     } 
   },
-  watch: {
-    mochis: {
-      handler: function(mochis) {
-        mochiStorage.save(mochis)
-      },
-      deep: true
-    }
-  },
-  created: function() {
-    this.mochis = mochiStorage.fetch();
-  },
   methods: {
     mochiAdd: function() {
       const date = this.$refs.date;
@@ -173,8 +159,7 @@ export default {
         return;
       }
       
-      this.mochis.push ({
-        id: mochiStorage.uid++,
+      this.mochisRef.push ({
         date: date.value,
         person: person.value,
         label: label.value,
@@ -188,8 +173,7 @@ export default {
       this.inputError = false;
     },
     mochiAdd_demo: function() {
-      this.mochis.push ({
-        id: mochiStorage.uid++,
+      this.mochisRef.push ({
         date: '2019-06-01',
         person: 'サンプル',
         label: 'サンプルだよ',
@@ -229,24 +213,21 @@ export default {
         return;
       }
 
-      //同じidのもちのindexを特定
-      const mochis = this.mochis;
-      const targetIndex = mochis.findIndex(mochi => mochi.id === tmpId);
-      // 上書き
-      mochis[targetIndex] = {
+      const datas = {
         date: date.value,
         person: person.value,
         label: label.value,
         price: price.value
       };
-      mochiStorage.save(mochis);
-      this.mochis = mochiStorage.fetch();
+      const updates = {};
+      updates[tmpId] = datas;
+      this.mochisRef.update(updates);
       this.inputError = false;
       this.closeModal();
     },
     mochiRemove: function() {
-      const index = this.mochis.indexOf(this.tmpMochi);
-      this.mochis.splice(index, 1);
+      const index = this.tmpMochi.id;
+      this.mochisRef.child(index).remove();
       this.isConfirm = false;
       this.closeModal();
     }
