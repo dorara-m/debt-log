@@ -117,12 +117,10 @@ export default {
   },
   created: function() {
     this.mochisRef = firebase.database().ref('/mochi-log');
-
     var _this = this;
     this.mochisRef.on('value', function(snapshot) {
       const mochisObject = snapshot.val();
-      const items = Object.keys(mochisObject).map(key => Object.assign({id: key}, mochisObject[key]));
-      _this.mochis = items;
+      _this.mochis = Object.keys(mochisObject).map(key => Object.assign({id: key}, mochisObject[key]));
     });
   },
   computed: {
@@ -318,6 +316,7 @@ header {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
+        cursor: pointer;
         > .right {
           > .person {
             font-size: 12px;
@@ -353,6 +352,7 @@ header {
     background-color: #fff;
   }
   .close {
+    cursor: pointer;
     position: absolute;
     top: 20px;
     left: 20px;
