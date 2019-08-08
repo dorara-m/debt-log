@@ -7,6 +7,9 @@
 ### 由来
 持ちつ持たれつ、より。
 
+## hosting
+https://mochi-mochi-f4efc.firebaseapp.com/
+
 ## Project setup
 ```
 npm install
