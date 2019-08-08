@@ -81,7 +81,7 @@
                 ¥<input type="number" ref="price" placeholder="いくら">
               </div>
               <div class="inputWrap">
-                <input type="date" ref="date" placeholder="いつ">
+                <input type="date" ref="date" :value="today" placeholder="いつ">
               </div>
               <div class="inputWrap">
                 <input type="text" ref="label" placeholder="何に">
@@ -148,7 +148,14 @@ export default {
       return function(date) {
         return this.computedMochi.filter((el) => el.date === date);
       }
-    } 
+    },
+    today: function() {
+      const dt = new Date();
+      const y = dt.getFullYear();
+      const m = ("00" + (dt.getMonth()+1)).slice(-2);
+      const d = ("00" + dt.getDate()).slice(-2);
+      return `${y}-${m}-${d}`;
+    }
   },
   methods: {
     mochiAdd: function() {
