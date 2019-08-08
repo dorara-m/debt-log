@@ -21,7 +21,7 @@
             <h3>{{date}}</h3>
             <ul class="app-data-list">
               <li v-for="(mochi, index) in currentDateMochi(date)" :key="index">
-                <button v-on:click="openModal(mochi)">
+                <button v-on:click="openEditModal(mochi)">
                   <div class="right">
                     <div class="person">{{mochi.person}}</div>
                     <div class="label">{{mochi.label}}</div>
@@ -33,34 +33,13 @@
           </div>
         </div>
       </div>
-
-      <div class="app-input">
-        <div class="container">
-          <h2>新規もち追加</h2>
-          <p class="error" v-if="inputError">未入力の箇所があります</p>
-          <form class="add-form" v-on:submit.prevent="mochiAdd">
-            <div class="flex">
-              ¥<input type="number" ref="price" placeholder="いくら">
-            </div>
-            <div>
-              <input type="text" ref="person" placeholder="誰が">
-            </div>
-            <div>
-              <input type="date" ref="date" placeholder="いつ">
-            </div>
-            <div>
-              <input type="text" ref="label" placeholder="何に">
-            </div>
-            <button class="submit">記録</button>
-          </form>
-          <div class="debug"><button v-on:click="mochiAdd_demo">デモデータ追加</button></div>
-        </div>
-      </div>
+      
+      <button class="app-new" v-on:click="openModal">新規</button>
     </main>
 
     <div class="modalWrap" v-if="isOpenModal">
       <div class="modal">
-        <div class="editModal" :class="{confirmOpen : isConfirm}">
+        <div class="modalContents editModal" v-if="isEdit" :class="{confirmOpen : isConfirm}">
           <div class="container">
             <h2>Edit</h2>
             <p class="error" v-if="inputError">未入力の箇所があります</p>
@@ -92,6 +71,31 @@
             </div>
           </div>
         </div>
+        <div v-else class="modalContents addModal">
+          <div class="container">
+            <h2>New</h2>
+            <p class="error" v-if="inputError">未入力の箇所があります</p>
+            <button class="close" v-on:click="closeModal"></button>
+            <form class="edit-form">
+              <div class="inputWrap price">
+                ¥<input type="number" ref="price" placeholder="いくら">
+              </div>
+              <div class="inputWrap">
+                <input type="date" ref="date" placeholder="いつ">
+              </div>
+              <div class="inputWrap">
+                <input type="text" ref="label" placeholder="何に">
+              </div>
+              <div class="inputWrap">
+                <input type="text" ref="person" placeholder="誰が">
+              </div>
+            </form>
+            <div class="btnArea">
+              <button v-on:click="mochiAdd_demo">Demo</button>
+              <button class="submit" v-on:click="mochiAdd">Add</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -108,9 +112,10 @@ export default {
       mochisRef: null,
       mochis: [],
       tmpMochi: {},
-      isConfirm: false,
       inputError: false,
       isOpenModal: false,
+      isEdit: false,
+      isConfirm: false,
       scrollPosition: 0,
       current: '全員'
     }
@@ -169,16 +174,24 @@ export default {
       label.value = '';
       price.value = '';
       this.inputError = false;
+      this.closeModal();
     },
     mochiAdd_demo: function() {
       this.mochisRef.push ({
-        date: '2019-06-01',
-        person: 'サンプル',
-        label: 'サンプルだよ',
+        date: '2019-07-01',
+        person: 'サンプルさん',
+        label: 'お茶',
         price: '3000'
       });
+      this.closeModal();
     },
-    openModal: function(item) {
+    openModal: function() {
+      this.isEdit = false;
+      this.isOpenModal = true;
+      this.initNoScroll();
+    },
+    openEditModal: function(item) {
+      this.isEdit = true;
       this.tmpMochi = item;
       this.isOpenModal = true;
       this.initNoScroll();
@@ -337,6 +350,15 @@ header {
   }
 }
 
+.app-new {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  font-size: 24px;
+  border: 1px solid #444;
+  background-color: #fff;
+}
+
 .modalWrap {
   position: fixed;
   background-color: rgba($color: #000, $alpha: .4);
@@ -374,7 +396,7 @@ header {
       transform: rotate(-45deg);
     }
   }
-  .editModal {
+  .modalContents {
     padding: 40px 0;
     position: relative;
     font-weight: bold;
@@ -386,6 +408,7 @@ header {
       width: 100%;
       height: 100%;
       background-color: rgba($color: #000, $alpha: .7);
+      z-index: 2;
     }
     h2 {
       font-size: 24px;
@@ -463,15 +486,4 @@ header {
   font-weight: bold;
 }
 
-.app-input {
-  margin-top: 50px;
-  .error {
-    color: red;
-  }
-  .submit {
-    margin-top: 30px;
-    width: 200px;
-    font-size: 20px;
-  }
-}
 </style>
