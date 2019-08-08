@@ -43,7 +43,7 @@
           <div class="container">
             <h2>Edit</h2>
             <p class="error" v-if="inputError">未入力の箇所があります</p>
-            <button class="close" v-on:click="closeModal"></button>
+            <button class="close" v-on:click="closeModal"><span></span></button>
             <form class="edit-form">
               <div class="inputWrap price">
                 ¥<input type="number" ref="price_edit" :value="tmpMochi.price" placeholder="いくら">
@@ -75,7 +75,7 @@
           <div class="container">
             <h2>New</h2>
             <p class="error" v-if="inputError">未入力の箇所があります</p>
-            <button class="close" v-on:click="closeModal"></button>
+            <button class="close" v-on:click="closeModal"><span></span></button>
             <form class="edit-form">
               <div class="inputWrap price">
                 ¥<input type="number" ref="price" placeholder="いくら">
@@ -380,20 +380,26 @@ header {
     left: 20px;
     width: 20px;
     height: 20px;
-    &:before, &:after {
-      content: '';
+    span {
       position: absolute;
-      width: 100%;
-      left: 0;
       top: 50%;
-      height: 2px;
-      background-color: #444;
-    }
-    &:before {
-      transform: rotate(45deg);
-    }
-    &:after {
-      transform: rotate(-45deg);
+      transform: translateY(-50%);
+      left: 0;
+      width: 100%;
+      height: 2px;;
+      &:before, &:after {
+        content: '';
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-color: #444;
+      }
+      &:before {
+        transform: rotate(45deg);
+      }
+      &:after {
+        transform: rotate(-45deg);
+      }
     }
   }
   .modalContents {
