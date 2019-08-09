@@ -42,12 +42,12 @@
     </main>
 
     <div class="modalWrap" v-if="isOpenModal">
-      <div class="modal">
-        <div class="modalContents editModal" v-if="isEdit" :class="{confirmOpen : isConfirm}">
-          <div class="container">
+      <div class="modal" :class="{confirmOpen : isConfirm}">
+        <div class="container">
+          <button class="close" v-on:click="closeModal"><span></span></button>
+          <div class="modalContents editModal" v-if="isEdit">
             <h2>Edit</h2>
             <p class="error" v-if="inputError">未入力の箇所があります</p>
-            <button class="close" v-on:click="closeModal"><span></span></button>
             <form class="edit-form">
               <div class="inputWrap price">
                 ¥<input type="number" ref="price_edit" :value="tmpMochi.price" placeholder="いくら">
@@ -67,19 +67,9 @@
               <button class="submit" v-on:click="mochiEdit">update</button>
             </div>
           </div>
-          <div v-if="isConfirm" class="confirmArea">
-            <p>本当に削除してもいいですか？</p>
-            <div class="btns">
-              <button v-on:click="mochiRemove">Yes</button>
-              <button v-on:click="isConfirm = false">No</button>
-            </div>
-          </div>
-        </div>
-        <div v-else class="modalContents addModal">
-          <div class="container">
+          <div class="modalContents addModal" v-else>
             <h2>New</h2>
             <p class="error" v-if="inputError">未入力の箇所があります</p>
-            <button class="close" v-on:click="closeModal"><span></span></button>
             <form class="edit-form">
               <div class="inputWrap price">
                 ¥<input type="number" ref="price" placeholder="いくら">
@@ -98,6 +88,13 @@
               <button v-on:click="mochiAdd_demo">Demo</button>
               <button class="submit" v-on:click="mochiAdd">Add</button>
             </div>
+          </div>
+        </div>
+        <div v-if="isConfirm" class="confirmArea">
+          <p>本当に削除してもいいですか？</p>
+          <div class="btns">
+            <button v-on:click="mochiRemove">Yes</button>
+            <button v-on:click="isConfirm = false">No</button>
           </div>
         </div>
       </div>
@@ -280,6 +277,7 @@ body {
 .container {
   width: calc(100% - 40px);
   margin: 0 20px;
+  position: relative;
   @media print, screen and (min-width: 767px) {
     max-width: 500px;
     margin: 0 auto;
@@ -302,6 +300,7 @@ main {
     opacity: .3;
   }
 }
+
 header {
   padding: 25px;
   .app-title {
@@ -378,7 +377,6 @@ header {
     }
   }
 }
-
 .app-new {
   position: fixed;
   bottom: 20px;
@@ -429,14 +427,27 @@ header {
     left: 0;
     width: 100%;
     background-color: #fff;
+    padding: 40px 0;
+    font-weight: bold;
+    &.confirmOpen::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba($color: #000, $alpha: .7);
+      z-index: 5;
+    }
   }
   .close {
     cursor: pointer;
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: -20px;
+    left: 0;
     width: 20px;
     height: 20px;
+    z-index: 4;
     span {
       position: absolute;
       top: 50%;
@@ -460,19 +471,7 @@ header {
     }
   }
   .modalContents {
-    padding: 40px 0;
-    position: relative;
     font-weight: bold;
-    &.confirmOpen::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba($color: #000, $alpha: .7);
-      z-index: 2;
-    }
     h2 {
       font-size: 24px;
       text-align: center;
@@ -513,29 +512,28 @@ header {
         font-weight: inherit;
       }
     }
-
-    .confirmArea {
-      position: absolute;
-      bottom: 0;
-      z-index: 2;
-      padding: 20px;
-      background-color: #fff;
-      width: 100%;
-      box-sizing: border-box;
-      text-align: center;
-      .btns {
-        margin-top: 20px;
-        display: flex;
-        width: 110px;
-        margin-right: auto;
-        margin-left: auto;
-        justify-content: space-between;
-        > button {
-          border: 1px solid #999;
-          font-size: 16px;
-          padding: 6px 10px;
-          font-weight: inherit;
-        }
+  }
+  .confirmArea {
+    position: absolute;
+    bottom: 0px;
+    z-index: 99;
+    padding: 20px;
+    background-color: #fff;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    .btns {
+      margin-top: 20px;
+      display: flex;
+      width: 110px;
+      margin-right: auto;
+      margin-left: auto;
+      justify-content: space-between;
+      > button {
+        border: 1px solid #999;
+        font-size: 16px;
+        padding: 6px 10px;
+        font-weight: inherit;
       }
     }
   }
