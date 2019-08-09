@@ -315,9 +315,26 @@ header {
   > .flex {
     display: flex;
     justify-content: flex-end;
+    position: relative;
+    &:after {
+      content: '';
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-45%);
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 10px 8px 0 8px;
+      border-color: #878787 transparent transparent transparent;
+      z-index: -1;
+    }
     select {
+      cursor: pointer;
+      border: 1px solid #bbb;
+      padding: 3px 12px;
+      padding-right: 32px;
       font-size: 14px;
-      width: 120px;
     }
   }
 }
