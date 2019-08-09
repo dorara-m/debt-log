@@ -34,7 +34,7 @@
         </div>
       </div>
       
-      <button class="app-new" v-on:click="openModal">新規</button>
+      <button class="app-new" v-on:click="openAddModal">新規</button>
     </main>
 
     <div class="modalWrap" v-if="isOpenModal">
@@ -192,7 +192,7 @@ export default {
       });
       this.closeModal();
     },
-    openModal: function() {
+    openAddModal: function() {
       this.isEdit = false;
       this.isOpenModal = true;
       this.initNoScroll();
