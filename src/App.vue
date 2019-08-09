@@ -33,8 +33,12 @@
           </div>
         </div>
       </div>
-      
-      <button class="app-new" v-on:click="openAddModal">新規</button>
+
+      <div class="app-new">
+        <div class="container">
+          <button v-on:click="openAddModal"><span></span></button>
+        </div>
+      </div>
     </main>
 
     <div class="modalWrap" v-if="isOpenModal">
@@ -274,7 +278,8 @@ body {
   padding: 50px 0;
 }
 .container {
-  padding: 0 20px;
+  width: calc(100% - 40px);
+  margin: 0 20px;
   @media print, screen and (min-width: 767px) {
     max-width: 500px;
     margin: 0 auto;
@@ -360,10 +365,38 @@ header {
 .app-new {
   position: fixed;
   bottom: 20px;
-  right: 30px;
-  font-size: 24px;
-  border: 1px solid #444;
-  background-color: #fff;
+  width: 100%;
+  > .container {
+    position: relative;
+    button {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background-color: #000;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60%;
+        height: 3px;
+        &:before, &:after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background-color: #fff;
+        }
+        &:before {
+          transform: rotate(90deg);
+        }
+      }
+    }
+  }
 }
 
 .modalWrap {
