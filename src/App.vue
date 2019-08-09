@@ -517,7 +517,7 @@ header {
     position: absolute;
     bottom: 0px;
     z-index: 99;
-    padding: 20px;
+    padding: 20px 0 30px;
     background-color: #fff;
     width: 100%;
     box-sizing: border-box;
