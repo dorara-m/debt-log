@@ -55,7 +55,7 @@
                 <input type="text" ref="label_edit" :value="tmpMochi.label" placeholder="何に">
               </div>
               <div class="inputWrap">
-                <input type="text" ref="person_edit" :value="tmpMochi.person" placeholder="誰が">
+                <input type="text" ref="person_edit" :value="tmpMochi.person" placeholder="誰が誰に">
               </div>
             </form>
             <div class="btnArea">
@@ -87,7 +87,7 @@
                 <input type="text" ref="label" placeholder="何に">
               </div>
               <div class="inputWrap">
-                <input type="text" ref="person" placeholder="誰が">
+                <input type="text" ref="person" placeholder="誰が誰に">
               </div>
             </form>
             <div class="btnArea">
@@ -186,9 +186,9 @@ export default {
     mochiAdd_demo: function() {
       this.mochisRef.push ({
         date: '2019-07-01',
-        person: 'サンプルさん',
-        label: 'お茶',
-        price: '3000'
+        person: 'Aさん→Bさん',
+        label: 'ペットボトルお茶',
+        price: '150'
       });
       this.closeModal();
     },
