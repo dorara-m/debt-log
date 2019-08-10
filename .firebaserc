@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "mochi-mochi-f4efc"
+    "default": "mochi-mochi-f4efc",
+    "demo": "mochi-mochi-demo"
   }
 }
