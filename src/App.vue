@@ -63,8 +63,8 @@
               </div>
             </form>
             <div class="btnArea">
-              <button v-on:click="isConfirm = true">delete</button>
-              <button class="submit" v-on:click="mochiEdit">update</button>
+              <button class="c-btn-gray" v-on:click="isConfirm = true">Delete</button>
+              <button class="c-btn-black" v-on:click="mochiEdit">Update</button>
             </div>
           </div>
           <div class="modalContents addModal" v-else>
@@ -85,16 +85,16 @@
               </div>
             </form>
             <div class="btnArea">
-              <button v-on:click="mochiAdd_demo">Demo</button>
-              <button class="submit" v-on:click="mochiAdd">Add</button>
+              <button class="c-btn-gray" v-on:click="mochiAdd_demo">Demo</button>
+              <button class="c-btn-black" v-on:click="mochiAdd">Add</button>
             </div>
           </div>
         </div>
         <div v-if="isConfirm" class="confirmArea">
           <p>本当に削除してもいいですか？</p>
           <div class="btns">
-            <button v-on:click="mochiRemove">Yes</button>
-            <button v-on:click="isConfirm = false">No</button>
+            <button class="c-btn-gray" v-on:click="isConfirm = false">No</button>
+            <button class="c-btn-red" v-on:click="mochiRemove">Yes</button>
           </div>
         </div>
       </div>
@@ -256,6 +256,7 @@ export default {
 
 <style lang="scss" scoped>
 @import url(./assets/_reset.css);
+$color-main: #2c3e50;
 body {
   &.isNoScroll {
     overflow: hidden;
@@ -269,7 +270,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: 0.02em;
-  color: #2c3e50;
+  color: $color-main;
   margin: 0 auto;
   position: relative;
   padding: 50px 0;
@@ -506,12 +507,6 @@ header {
       margin-left: auto;
       display: flex;
       justify-content: space-around;
-      > button {
-        border: 1px solid #999;
-        font-size: 16px;
-        padding: 6px 10px;
-        font-weight: inherit;
-      }
     }
   }
   .confirmArea {
@@ -530,22 +525,40 @@ header {
       margin-right: auto;
       margin-left: auto;
       justify-content: space-between;
-      > button {
-        border: 1px solid #999;
-        font-size: 16px;
-        padding: 6px 10px;
-        font-weight: inherit;
-      }
     }
   }
 }
 
 .error {
-  color: red;
+  color: crimson;
   font-size: 14px;
   margin-bottom: 10px;
   text-align: center;
   font-weight: bold;
+}
+.c-btn {
+  border-width: 1px;
+  border-style: solid;
+  font-size: 16px;
+  padding: 6px 10px;
+  font-weight: inherit;
+  cursor: pointer;
+  &-black {
+    @extend .c-btn;
+    background-color: $color-main;
+    color: #fff;
+    border-color: $color-main;
+  }
+  &-gray {
+    @extend .c-btn;
+    color: #999;
+    border-color: #bbb;
+  }
+  &-red {
+    @extend .c-btn;
+    color: crimson;
+    border-color: crimson;
+  }
 }
 
 </style>
