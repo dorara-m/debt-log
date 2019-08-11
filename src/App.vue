@@ -479,17 +479,18 @@ header {
     }
     .inputWrap {
       border-bottom: 1px solid #bbb;
-      padding-bottom: 3px;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       font-size: 13px;
       > input {
+        width: 100%;
+        padding: 5px 0;
         font-weight: inherit;
         font-size: inherit;
         display: inline-block;
       }
       &.price {
         display: flex;
-        justify-content: space-between;
+        align-items: baseline;
         font-size: 18px;
         padding-bottom: 5px;
         margin-bottom: 25px;
