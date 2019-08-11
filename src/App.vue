@@ -387,8 +387,8 @@ header {
     button {
       position: absolute;
       bottom: 0;
-      right: 0;
-      background-color: #000;
+      right: 10px;
+      background-color: $color-main;
       width: 40px;
       height: 40px;
       border-radius: 50%;
