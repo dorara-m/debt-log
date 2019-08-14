@@ -56,10 +56,10 @@
                 <input type="date" ref="date_edit" :value="tmpMochi.date" placeholder="いつ">
               </div>
               <div class="inputWrap">
-                <input type="text" ref="label_edit" :value="tmpMochi.label" placeholder="何に">
+                <input type="text" ref="person_edit" :value="tmpMochi.person" placeholder="誰が誰に">
               </div>
               <div class="inputWrap">
-                <input type="text" ref="person_edit" :value="tmpMochi.person" placeholder="誰が誰に">
+                <input type="text" ref="label_edit" :value="tmpMochi.label" placeholder="何に">
               </div>
             </form>
             <div class="btnArea">
@@ -78,10 +78,10 @@
                 <input type="date" ref="date" :value="today" placeholder="いつ">
               </div>
               <div class="inputWrap">
-                <input type="text" ref="label" placeholder="何に">
+                <input type="text" ref="person" placeholder="誰が誰に">
               </div>
               <div class="inputWrap">
-                <input type="text" ref="person" placeholder="誰が誰に">
+                <input type="text" ref="label" placeholder="何に">
               </div>
             </form>
             <div class="btnArea">
