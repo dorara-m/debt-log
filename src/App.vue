@@ -50,7 +50,7 @@
             <p class="error" v-if="inputError">未入力の箇所があります</p>
             <form class="edit-form">
               <div class="inputWrap price">
-                ¥<input type="number" ref="price_edit" :value="tmpMochi.price" placeholder="いくら">
+                ¥<input type="text" ref="price_edit" :value="tmpMochi.price" placeholder="いくら">
               </div>
               <div class="inputWrap">
                 <input type="date" ref="date_edit" :value="tmpMochi.date" placeholder="いつ">
@@ -137,6 +137,7 @@ export default {
     },
     computedMochi: function() {
       return this.mochis.filter((el) => {
+        el.price = el.price.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
         return this.current === '全員' ? true : this.current === el.person;
       }, this);
     },
