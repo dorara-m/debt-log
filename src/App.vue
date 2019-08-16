@@ -23,7 +23,11 @@
               <li v-for="(mochi, index) in currentDateMochi(date)" :key="index">
                 <button v-on:click="openEditModal(mochi)">
                   <div class="right">
-                    <div class="person">{{mochi.person}}</div>
+                    <div class="person">
+                      <span>{{mochi.personA}}</span>
+                      <span>→</span>
+                      <span>{{mochi.personB}}</span>
+                    </div>
                     <div class="label">{{mochi.label}}</div>
                   </div>
                   <div class="price">¥{{mochi.price.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}}</div>
@@ -55,8 +59,11 @@
               <div class="inputWrap">
                 <input type="date" ref="date_edit" :value="tmpMochi.date" placeholder="いつ">
               </div>
-              <div class="inputWrap">
-                <input type="text" ref="person_edit" :value="tmpMochi.person" placeholder="誰が誰に">
+              <div class="inputWrap person">
+                <input type="text" ref="personA_edit" :value="tmpMochi.personA" placeholder="誰">
+                <span>が</span>
+                <input type="text" ref="personB_edit" :value="tmpMochi.personB" placeholder="誰">
+                <span>に借りた</span>                
               </div>
               <div class="inputWrap">
                 <input type="text" ref="label_edit" :value="tmpMochi.label" placeholder="何に">
@@ -77,11 +84,14 @@
               <div class="inputWrap">
                 <input type="date" ref="date" :value="today" placeholder="いつ">
               </div>
-              <div class="inputWrap">
-                <input type="text" ref="person" placeholder="誰が誰に">
+              <div class="inputWrap person">
+                <input type="text" ref="personA" placeholder="誰">
+                <span>が</span>
+                <input type="text" ref="personB" placeholder="誰">
+                <span>に借りた</span>                
               </div>
               <div class="inputWrap">
-                <input type="text" ref="label" placeholder="何に">
+                <input type="text" ref="label" placeholder="用途">
               </div>
             </form>
             <div class="btnArea">
@@ -131,13 +141,13 @@ export default {
   },
   computed: {
     users: function() {
-      let persons = this.mochis.map(mochi => mochi.person);
+      let persons = this.mochis.map(mochi => mochi.personA);
       persons.unshift('全員');
       return persons.filter((x, i, self) => self.indexOf(x) === i);
     },
     computedMochi: function() {
       return this.mochis.filter((el) => {
-        return this.current === '全員' ? true : this.current === el.person;
+        return this.current === '全員' ? true : this.current === el.personA;
       }, this);
     },
     dateList: function() {
@@ -161,24 +171,27 @@ export default {
   methods: {
     mochiAdd: function() {
       const date = this.$refs.date;
-      const person = this.$refs.person;
+      const personA = this.$refs.personA;
+      const personB = this.$refs.personB;
       const label = this.$refs.label;
       const price = this.$refs.price;
 
-      if (!date.value.length || !person.value.length || !label.value.length || !price.value.length) {
+      if (!date.value.length || !personA.value.length || !personB.value.length || !label.value.length || !price.value.length) {
         this.inputError = true;
         return;
       }
-      
+
       this.mochisRef.push ({
         date: date.value,
-        person: person.value,
+        personA: personA.value,
+        personB: personB.value,
         label: label.value,
         price: price.value
       });
 
       date.value = '';
-      person.value = '';
+      personA.value = '';
+      personB.value = '';
       label.value = '';
       price.value = '';
       this.inputError = false;
@@ -187,7 +200,8 @@ export default {
     mochiAdd_demo: function() {
       this.mochisRef.push ({
         date: '2019-07-01',
-        person: 'Aさん→Bさん',
+        personA: 'Aさん',
+        personB: 'Bさん',
         label: 'ペットボトルお茶',
         price: '150'
       });
@@ -223,18 +237,20 @@ export default {
     mochiEdit: function() {
       const tmpId = this.tmpMochi.id;
       const date = this.$refs.date_edit;
-      const person = this.$refs.person_edit;
+      const personA = this.$refs.personA_edit;
+      const personB = this.$refs.personB_edit;
       const label = this.$refs.label_edit;
       const price = this.$refs.price_edit;
 
-      if (!date.value.length || !person.value.length || !label.value.length || !price.value.length) {
+      if (!date.value.length || !personA.value.length || !personB.value.length || !label.value.length || !price.value.length) {
         this.inputError = true;
         return;
       }
 
       const datas = {
         date: date.value,
-        person: person.value,
+        personA: personA.value,
+        personB: personB.value,
         label: label.value,
         price: price.value
       };
@@ -493,10 +509,20 @@ header {
         display: flex;
         align-items: baseline;
         font-size: 18px;
-        padding-bottom: 5px;
+        // padding-bottom: 5px;
         margin-bottom: 25px;
         > input {
           text-align: right;
+        }
+      }
+      &.person {
+        display: flex;
+        align-items: baseline;
+        > input {
+          width: 30%;
+        }
+        > span {
+          margin: 0 10px;
         }
       }
     }
