@@ -63,7 +63,7 @@
                 <input type="text" ref="personA_edit" :value="tmpMochi.personA" placeholder="誰">
                 <span>が</span>
                 <input type="text" ref="personB_edit" :value="tmpMochi.personB" placeholder="誰">
-                <span>に借りた</span>                
+                <span class="rent">に借りた</span>               
               </div>
               <div class="inputWrap">
                 <input type="text" ref="label_edit" :value="tmpMochi.label" placeholder="何に">
@@ -88,7 +88,7 @@
                 <input type="text" ref="personA" placeholder="誰">
                 <span>が</span>
                 <input type="text" ref="personB" placeholder="誰">
-                <span>に借りた</span>                
+                <span class="rent">に借りた</span>
               </div>
               <div class="inputWrap">
                 <input type="text" ref="label" placeholder="用途">
@@ -519,10 +519,13 @@ header {
         display: flex;
         align-items: baseline;
         > input {
-          width: 30%;
+          width: 35%;
         }
         > span {
-          margin: 0 10px;
+          margin: 0 auto;
+          &.rent {
+            margin-right: 0;
+          }
         }
       }
     }
