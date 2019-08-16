@@ -24,3 +24,5 @@ yarn-error.log*
 #tools
 .firebase/
 .circleci/
+
+.firebaserc

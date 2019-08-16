@@ -1,8 +1,7 @@
 # mochi-mochi
 ## what?
 ### 構想
-金額記録アプリ。
-主に立替金などを記録して、管理するシステム。
+立て替え金記録アプリ。
 
 ### 由来
 持ちつ持たれつ、より。
@@ -13,6 +12,17 @@ https://mochi-mochi-demo.firebaseapp.com/
 ## Project setup
 ```
 npm install
+```
+
+### Add your firebase-key
+Firebase Realtime Databaseの使用を前提としている。
+クローンして使う場合は、`config/key.js`をルート直下に追加すること。
+```config/key.js
+export default {
+  apiKey: "",
+  authDomain: "",
+  …
+}
 ```
 
 ### Compiles and hot-reloads for development
