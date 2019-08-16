@@ -6,7 +6,7 @@
 ### 由来
 持ちつ持たれつ、より。
 
-## hosting
+## demo
 https://mochi-mochi-demo.firebaseapp.com/
 
 ## Project setup
