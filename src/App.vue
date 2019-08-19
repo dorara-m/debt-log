@@ -446,6 +446,17 @@ header {
     background-color: #fff;
     padding: 40px 0;
     font-weight: bold;
+    animation: fade both .5s;
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+    }
     &.confirmOpen::before {
       content: '';
       position: absolute;
