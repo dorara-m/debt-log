@@ -350,7 +350,8 @@ header {
       border: 1px solid #bbb;
       padding: 3px 12px;
       padding-right: 32px;
-      font-size: 14px;
+      font-size: 16px;
+      transform: scale(0.9);
     }
   }
 }
