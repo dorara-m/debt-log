@@ -507,22 +507,22 @@ header {
     }
     .inputWrap {
       border-bottom: 1px solid #bbb;
-      margin-bottom: 12px;
-      font-size: 13px;
+      margin-bottom: 18px;
       > input {
         width: 100%;
         padding: 5px 0;
+        font-size: 16px;
         font-weight: inherit;
-        font-size: inherit;
         display: inline-block;
       }
       &.price {
         display: flex;
         align-items: baseline;
-        font-size: 18px;
+        font-size: 20px;
         // padding-bottom: 5px;
         margin-bottom: 25px;
         > input {
+          font-size: inherit;
           text-align: right;
         }
       }
