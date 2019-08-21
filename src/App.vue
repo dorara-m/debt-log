@@ -30,7 +30,7 @@
                     </div>
                     <div class="label">{{mochi.label}}</div>
                   </div>
-                  <div class="price">¥{{mochi.price.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}}</div>
+                  <div class="price">¥{{mochi.price}}</div>
                 </button>
               </li>
             </ul>
@@ -51,7 +51,9 @@
           <button class="close" v-on:click="closeModal"><span></span></button>
           <div class="modalContents editModal" v-if="isEdit">
             <h2>Edit</h2>
-            <p class="error" v-if="inputError">未入力の箇所があります</p>
+            <div class="error" v-if="inputError">
+              <p v-for="(mes, index) in inputErrorMes" :key="index">{{mes}}</p>
+            </div>
             <form class="edit-form">
               <div class="inputWrap price">
                 ¥<input type="number" ref="price_edit" :value="tmpMochi.price" placeholder="いくら">
@@ -76,13 +78,15 @@
           </div>
           <div class="modalContents addModal" v-else>
             <h2>New</h2>
-            <p class="error" v-if="inputError">未入力の箇所があります</p>
+            <div class="error" v-if="inputError">
+              <p v-for="(mes, index) in inputErrorMes" :key="index">{{mes}}</p>
+            </div>
             <form class="edit-form">
               <div class="inputWrap price">
                 ¥<input type="number" ref="price" placeholder="いくら">
               </div>
               <div class="inputWrap">
-                <input type="date" ref="date" :value="today" placeholder="いつ">
+                <input type="date" ref="date" :value="today">
               </div>
               <div class="inputWrap person">
                 <input type="text" ref="personA" placeholder="誰">
@@ -124,11 +128,13 @@ export default {
       mochis: [],
       tmpMochi: {},
       inputError: false,
+      inputErrorMes: [],
       isOpenModal: false,
       isEdit: false,
       isConfirm: false,
       scrollPosition: 0,
-      current: '全員'
+      current: '全員',
+      now_price: 0
     }
   },
   created: function() {
@@ -170,14 +176,25 @@ export default {
   },
   methods: {
     mochiAdd: function() {
+      this.inputError = false;
+      this.inputErrorMes = [];
+
       const date = this.$refs.date;
       const personA = this.$refs.personA;
       const personB = this.$refs.personB;
       const label = this.$refs.label;
       const price = this.$refs.price;
 
-      if (!date.value.length || !personA.value.length || !personB.value.length || !label.value.length || !price.value.length) {
+      const price_num = Number(price.value);
+
+      if (!date.value.length || !personA.value.length || !personB.value.length || !label.value.length || price_num <= 0) {
         this.inputError = true;
+        if (price_num <= 0) {
+          this.inputErrorMes.push('値段が無効な数値です。');
+        }
+        if (!date.value.length || !personA.value.length || !personB.value.length || !label.value.length) {
+          this.inputErrorMes.push('未入力の箇所があります。');
+        }
         return;
       }
 
@@ -186,7 +203,7 @@ export default {
         personA: personA.value,
         personB: personB.value,
         label: label.value,
-        price: price.value
+        price: price_num
       });
 
       date.value = '';
@@ -194,7 +211,6 @@ export default {
       personB.value = '';
       label.value = '';
       price.value = '';
-      this.inputError = false;
       this.closeModal();
     },
     mochiAdd_demo: function() {
@@ -203,7 +219,7 @@ export default {
         personA: 'Aさん',
         personB: 'Bさん',
         label: 'ペットボトルお茶',
-        price: '150'
+        price: 150
       });
       this.closeModal();
     },
@@ -220,6 +236,8 @@ export default {
     },
     closeModal: function() {
       this.isOpenModal = false;
+      this.inputError = false;
+      this.inputErrorMes = [];
       this.destoryNoScroll();
     },
     initNoScroll() {
@@ -235,15 +253,26 @@ export default {
       window.scrollTo(0, this.scrollPosition);
     },
     mochiEdit: function() {
+      this.inputError = false;
+      this.inputErrorMes = [];
+
       const tmpId = this.tmpMochi.id;
       const date = this.$refs.date_edit;
       const personA = this.$refs.personA_edit;
       const personB = this.$refs.personB_edit;
       const label = this.$refs.label_edit;
       const price = this.$refs.price_edit;
+      
+      const price_num = Number(price.value);
 
-      if (!date.value.length || !personA.value.length || !personB.value.length || !label.value.length || !price.value.length) {
+      if (!date.value.length || !personA.value.length || !personB.value.length || !label.value.length || price_num <= 0) {
         this.inputError = true;
+        if (price_num <= 0) {
+          this.inputErrorMes.push('値段が無効な数値です。');
+        }
+        if (!date.value.length || !personA.value.length || !personB.value.length || !label.value.length) {
+          this.inputErrorMes.push('未入力の箇所があります。');
+        }
         return;
       }
 
@@ -252,12 +281,11 @@ export default {
         personA: personA.value,
         personB: personB.value,
         label: label.value,
-        price: price.value
+        price: price_num
       };
       const updates = {};
       updates[tmpId] = datas;
       this.mochisRef.update(updates);
-      this.inputError = false;
       this.closeModal();
     },
     mochiRemove: function() {
@@ -576,6 +604,9 @@ header {
   margin-bottom: 10px;
   text-align: center;
   font-weight: bold;
+  > p+p {
+    margin-top: 6px;
+  }
 }
 .c-btn {
   border-width: 1px;
