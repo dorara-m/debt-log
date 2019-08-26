@@ -187,12 +187,15 @@ export default {
 
       const price_num = Number(price.value);
 
-      if (!date.value.length || !personA.value.length || !personB.value.length || !label.value.length || price_num <= 0) {
+      const isEmpty = () => {
+        !date.value.length || !personA.value.length || !personB.value.length || !label.value.length
+      }
+      if (isEmpty || price_num <= 0) {
         this.inputError = true;
         if (price_num <= 0) {
           this.inputErrorMes.push('値段が無効な数値です。');
         }
-        if (!date.value.length || !personA.value.length || !personB.value.length || !label.value.length) {
+        if (isEmpty) {
           this.inputErrorMes.push('未入力の箇所があります。');
         }
         return;
@@ -265,12 +268,15 @@ export default {
       
       const price_num = Number(price.value);
 
-      if (!date.value.length || !personA.value.length || !personB.value.length || !label.value.length || price_num <= 0) {
+      const isEmpty = () => {
+        !date.value.length || !personA.value.length || !personB.value.length || !label.value.length
+      }
+      if (isEmpty || price_num <= 0) {
         this.inputError = true;
         if (price_num <= 0) {
           this.inputErrorMes.push('値段が無効な数値です。');
         }
-        if (!date.value.length || !personA.value.length || !personB.value.length || !label.value.length) {
+        if (isEmpty) {
           this.inputErrorMes.push('未入力の箇所があります。');
         }
         return;
